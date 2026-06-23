@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function Header() {
   return (
     <div className="flex justify-between p-4 border-b">
@@ -18,6 +18,18 @@ function App() {
   const [deals, setDeals] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
 
+useEffect(() => {
+  fetch("http://127.0.0.1:5000/deals")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      setDeals(data);
+    })
+    .catch((error) => {
+      console.log("FETCH ERROR:", error);
+    });
+}, []);
+
 const addDeal = () => {
   const newDeal = {
     title,
@@ -35,7 +47,7 @@ const addDeal = () => {
   else{
   setDeals([...deals, newDeal]);
   }
-  
+
 setTitle("");
 setStore("");
 setDiscount("");
@@ -47,6 +59,7 @@ const updatedDeals = deals.filter((deal, index) => {
   return index !== indexToDelete;
 });
 setDeals(updatedDeals);
+
 };
 const editDeal = (index) => {
   setSelectedIndex(index);
