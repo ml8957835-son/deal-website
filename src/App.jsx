@@ -16,7 +16,8 @@ function App() {
   const [discount, setDiscount] = useState("");
   const [description, setDescription] = useState("");
   const [deals, setDeals] = useState([]);
-  
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
 const addDeal = () => {
   const newDeal = {
     title,
@@ -24,8 +25,36 @@ const addDeal = () => {
     store,
     description
   };
-
+   
+  if (selectedIndex !== null) {
+    const updatedDeals = [...deals];
+    updatedDeals[selectedIndex] = newDeal;
+    setDeals(updatedDeals);
+    setSelectedIndex(null);
+  } 
+  else{
   setDeals([...deals, newDeal]);
+  }
+  
+setTitle("");
+setStore("");
+setDiscount("");
+setDescription("");
+};
+const deleteDeal = (indexToDelete) => 
+  {
+const updatedDeals = deals.filter((deal, index) => {
+  return index !== indexToDelete;
+});
+setDeals(updatedDeals);
+};
+const editDeal = (index) => {
+  setSelectedIndex(index);
+
+  setTitle(deals[index].title);
+  setStore(deals[index].store);
+  setDiscount(deals[index].discount);
+  setDescription(deals[index].description);
 };
 
   return (
@@ -103,10 +132,20 @@ const addDeal = () => {
 {deals.map((deal, index) => (
   <div key={index} className="border p-3 mt-3 rounded">
     <h3>{deal.title}</h3>
-    <p>{deal.discount}</p>
     <p>{deal.store}</p>
+    <p>{deal.discount}</p>
     <p>{deal.description}</p>
-  </div>
+<button className="bg-green-500 text-white px-3 py-1 rounded mr-2"
+ onClick={() => editDeal(index)}>
+  Edit
+</button>
+<button
+  className="bg-red-500 text-white px-3 py-1 rounded"
+  onClick={() => deleteDeal(index)}
+>
+  Delete
+</button>
+</div>
 ))}
 </div>
     </div>
