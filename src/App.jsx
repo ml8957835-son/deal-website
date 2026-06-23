@@ -141,7 +141,6 @@ const editDeal = (index) => {
 >
   Add Deal
 </button>
-
 {deals.map((deal, index) => (
   <div key={index} className="border p-3 mt-3 rounded">
     <h3>{deal.title}</h3>
