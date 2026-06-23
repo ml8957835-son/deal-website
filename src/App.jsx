@@ -30,28 +30,30 @@ useEffect(() => {
     });
 }, []);
 
-const addDeal = () => {
+const addDeal = async () => {
   const newDeal = {
     title,
-    discount,
     store,
-    description
+    discount,
+    description,
   };
-   
-  if (selectedIndex !== null) {
-    const updatedDeals = [...deals];
-    updatedDeals[selectedIndex] = newDeal;
-    setDeals(updatedDeals);
-    setSelectedIndex(null);
-  } 
-  else{
-  setDeals([...deals, newDeal]);
-  }
 
-setTitle("");
-setStore("");
-setDiscount("");
-setDescription("");
+  const response = await fetch("http://localhost:5000/deals", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newDeal),
+  });
+
+  const savedDeal = await response.json();
+
+  setDeals([...deals, savedDeal]);
+
+  setTitle("");
+  setStore("");
+  setDiscount("");
+  setDescription("");
 };
 const deleteDeal = (indexToDelete) => 
   {

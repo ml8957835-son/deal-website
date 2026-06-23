@@ -1,3 +1,4 @@
+const db = require("./db");
 const express = require("express");
 const cors = require("cors");
 
@@ -18,22 +19,25 @@ app.get("/", (req, res) => {
 });
 
 app.get("/deals", (req, res) => {
-  res.json([
-    {
-      title: "Nike Shoes",
-      store: "Nike",
-      discount: "50%",
-      description: "Summer sale"
-    },
-    {
-      title: "Dell Laptop",
-      store: "Dell",
-      discount: "20%",
-      description: "Student offer"
-    }
-  ]);
+  const deals = db.prepare("SELECT * FROM deals").all();
+  res.json(deals);
 });
+app.post("/deals", (req, res) => {
+  const { title, store, discount, description } = req.body;
 
+  const result = db.prepare(`
+    INSERT INTO deals (title, store, discount, description)
+    VALUES (?, ?, ?, ?)
+  `).run(title, store, discount, description);
+
+  res.json({
+    id: result.lastInsertRowid,
+    title,
+    store,
+    discount,
+    description
+  });
+});
 app.listen(5000, () => {
   console.log("Server started on port 5000");
 });
