@@ -214,7 +214,7 @@ onClick={() => deleteDeal(deal.id)}>
     />
     <Route
   path="/Login"
-  element={<Login />}
+  element={<Login setIsLoggedIn={setIsLoggedIn} />}
 />
 
   </Routes>

@@ -1,4 +1,13 @@
-function Login() {
+import { useNavigate } from "react-router-dom";
+
+function Login({ setIsLoggedIn }) {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+    navigate("/admin");
+  };
+
   return (
     <div>
       <h2>Login</h2>
@@ -19,7 +28,9 @@ function Login() {
       <br />
       <br />
 
-      <button>Login</button>
+      <button onClick={handleLogin}>
+        Login
+      </button>
     </div>
   );
 }
