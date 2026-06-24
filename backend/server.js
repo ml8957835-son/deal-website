@@ -38,6 +38,17 @@ app.post("/deals", (req, res) => {
     description
   });
 });
+app.delete("/deals/:id", (req, res) => {
+  const { id } = req.params;
+
+  const stmt = db.prepare("DELETE FROM deals WHERE id = ?");
+  const result = stmt.run(id);
+
+  res.json({
+    success: true,
+    deleted: result.changes,
+  });
+});
 app.listen(5000, () => {
   console.log("Server started on port 5000");
 });

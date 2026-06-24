@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 function Header() {
   return (
     <div className="flex justify-between p-4 border-b">
@@ -55,13 +56,14 @@ const addDeal = async () => {
   setDiscount("");
   setDescription("");
 };
-const deleteDeal = (indexToDelete) => 
-  {
-const updatedDeals = deals.filter((deal, index) => {
-  return index !== indexToDelete;
-});
-setDeals(updatedDeals);
+const deleteDeal = async (dealId) => {
+  await axios.delete(`http://localhost:5000/deals/${dealId}`);
 
+  const updatedDeals = deals.filter((deal) => {
+    return deal.id !== dealId;
+  });
+
+  setDeals(updatedDeals);
 };
 const editDeal = (index) => {
   setSelectedIndex(index);
@@ -146,6 +148,7 @@ const editDeal = (index) => {
 {deals.map((deal, index) => (
   <div key={index} className="border p-3 mt-3 rounded">
     <h3>{deal.title}</h3>
+    <p>ID: {deal.id}</p>
     <p>{deal.store}</p>
     <p>{deal.discount}</p>
     <p>{deal.description}</p>
@@ -155,8 +158,7 @@ const editDeal = (index) => {
 </button>
 <button
   className="bg-red-500 text-white px-3 py-1 rounded"
-  onClick={() => deleteDeal(index)}
->
+onClick={() => deleteDeal(deal.id)}>
   Delete
 </button>
 </div>
