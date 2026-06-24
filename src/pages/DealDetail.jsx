@@ -19,6 +19,9 @@ function DealDetail({ deals }) {
     <p>Store: {deal.store}</p>
     <p>Discount: {deal.discount}</p>
     <p>Description: {deal.description}</p>
+  
+  <button>Claim Deal</button>
+
   </div>
 );  
 }
