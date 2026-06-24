@@ -1,6 +1,9 @@
 import PublicDeals from "./pages/publicDeals";
 import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import DealDetail from "./pages/DealDetail";
 import axios from "axios";
+import { Link } from "react-router-dom";
 function Header() {
   return (
     <div className="flex justify-between p-4 border-b">
@@ -41,7 +44,6 @@ const addDeal = async () => {
     discount,
     description,
   };
-
   const response = await fetch("http://localhost:5000/deals", {
     method: "POST",
     headers: {
@@ -78,6 +80,11 @@ const editDeal = (index) => {
 };
 
   return (
+      <Routes>
+
+    <Route
+      path="/"
+      element={
     <div>
       <Header />
 
@@ -159,10 +166,14 @@ const editDeal = (index) => {
  deal.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
  deal.store.toLowerCase().includes(searchTerm.toLowerCase()) ||
  deal.discount.toLowerCase().includes(searchTerm.toLowerCase()) ||
- deal.description.toLowerCase().includes(searchTerm.toLowerCase())).map((deal, index) => (
+ deal.description.toLowerCase().includes(searchTerm.toLowerCase()))
+ .map((deal, index) => (
   <div key={index} className="border p-3 mt-3 rounded">
-    <h3>{deal.title}</h3>
-    <p>ID: {deal.id}</p>
+<h3>
+  <Link to={`/deal/${deal.id}`}>
+    {deal.title}
+  </Link>
+</h3>    <p>ID: {deal.id}</p>
     <p>{deal.store}</p>
     <p>{deal.discount}</p>
     <p>{deal.description}</p>
@@ -182,7 +193,16 @@ onClick={() => deleteDeal(deal.id)}>
 
 <PublicDeals />
     </div>
-  );
-}
+   
 
+ }
+  />
+ <Route
+      path="/deal/:id"
+      element={<DealDetail deals={deals} />}
+    />
+
+  </Routes>
+);
+} 
 export default App;
