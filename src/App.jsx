@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Register from "./pages/Register";
 function Header() {
   return (
     <div className="flex justify-between p-4 border-b">
@@ -215,6 +216,10 @@ onClick={() => deleteDeal(deal.id)}>
     <Route
   path="/Login"
   element={<Login setIsLoggedIn={setIsLoggedIn} />}
+/>
+<Route
+  path="/register"
+  element={<Register />}
 />
 
   </Routes>
