@@ -1,3 +1,4 @@
+import PublicDeals from "./pages/publicDeals";
 import { useState, useEffect } from "react";
 import axios from "axios";
 function Header() {
@@ -164,6 +165,9 @@ onClick={() => deleteDeal(deal.id)}>
 </div>
 ))}
 </div>
+<hr className="my-6" />
+
+<PublicDeals />
     </div>
   );
 }
