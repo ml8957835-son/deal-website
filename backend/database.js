@@ -10,8 +10,17 @@ db.prepare(`
     discount TEXT NOT NULL,
     description TEXT
   )
+ `).run();
+ console.log("Deals table created successfully!");
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS claims (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    dealId INTEGER NOT NULL
+  )
 `).run();
 
-console.log("Deals table created successfully!");
+console.log("Claims table created successfully!");
+
 
 db.close();

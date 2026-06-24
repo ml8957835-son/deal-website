@@ -49,6 +49,19 @@ app.delete("/deals/:id", (req, res) => {
     deleted: result.changes,
   });
 });
+app.post("/claims", (req, res) => {
+  const { dealId } = req.body;
+
+  const result = db.prepare(`
+    INSERT INTO claims (dealId)
+    VALUES (?)
+  `).run(dealId);
+
+  res.json({
+    id: result.lastInsertRowid,
+    dealId,
+  });
+});
 app.listen(5000, () => {
   console.log("Server started on port 5000");
 });
