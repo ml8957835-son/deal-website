@@ -19,6 +19,8 @@ function App() {
   const [description, setDescription] = useState("");
   const [deals, setDeals] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
 useEffect(() => {
   fetch("http://127.0.0.1:5000/deals")
@@ -146,7 +148,18 @@ const editDeal = (index) => {
 >
   Add Deal
 </button>
-{deals.map((deal, index) => (
+<input
+  type="text"
+  placeholder="Search deals..."
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.target.value)}
+  className="border p-2 mt-3 rounded w-full"
+/>
+{deals.filter((deal) =>
+ deal.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+ deal.store.toLowerCase().includes(searchTerm.toLowerCase()) ||
+ deal.discount.toLowerCase().includes(searchTerm.toLowerCase()) ||
+ deal.description.toLowerCase().includes(searchTerm.toLowerCase())).map((deal, index) => (
   <div key={index} className="border p-3 mt-3 rounded">
     <h3>{deal.title}</h3>
     <p>ID: {deal.id}</p>
