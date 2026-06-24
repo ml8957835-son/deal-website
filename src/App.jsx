@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import DealDetail from "./pages/DealDetail";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Login from "./pages/Login";
 function Header() {
   return (
     <div className="flex justify-between p-4 border-b">
@@ -201,6 +202,10 @@ onClick={() => deleteDeal(deal.id)}>
       path="/deal/:id"
       element={<DealDetail deals={deals} />}
     />
+    <Route
+  path="/Login"
+  element={<Login />}
+/>
 
   </Routes>
 );
