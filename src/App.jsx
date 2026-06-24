@@ -5,6 +5,7 @@ import DealDetail from "./pages/DealDetail";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Login from "./pages/Login";
+import ProtectedRoute from "./components/ProtectedRoute";
 function Header() {
   return (
     <div className="flex justify-between p-4 border-b">
@@ -24,6 +25,7 @@ function App() {
   const [deals, setDeals] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
 useEffect(() => {
@@ -82,11 +84,17 @@ const editDeal = (index) => {
 
   return (
       <Routes>
+       
+      <Route
+      path="/"
+      element={<PublicDeals />}
+/>
 
     <Route
-      path="/"
-      element={
-    <div>
+  path="/admin"
+  element={
+    <ProtectedRoute isLoggedIn={isLoggedIn}>
+      <div>
       <Header />
 
      <div className="p-6">
@@ -188,13 +196,15 @@ onClick={() => deleteDeal(deal.id)}>
   Delete
 </button>
 </div>
+
 ))}
 </div>
 <hr className="my-6" />
 
 <PublicDeals />
     </div>
-   
+   </ProtectedRoute>
+
 
  }
   />
