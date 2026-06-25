@@ -62,6 +62,20 @@ app.post("/claims", (req, res) => {
     dealId,
   });
 });
+app.get("/claims", (req, res) => {
+  const claims = db.prepare(`
+    SELECT
+      claims.id,
+      deals.title,
+      deals.store,
+      deals.discount,
+      deals.description
+    FROM claims
+    JOIN deals ON claims.dealId = deals.id
+  `).all();
+
+  res.json(claims);
+});
 app.listen(5000, () => {
   console.log("Server started on port 5000");
 });
