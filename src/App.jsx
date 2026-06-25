@@ -26,7 +26,6 @@ function App() {
   const [deals, setDeals] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
 useEffect(() => {
@@ -94,7 +93,7 @@ const editDeal = (index) => {
     <Route
   path="/admin"
   element={
-    <ProtectedRoute isLoggedIn={isLoggedIn}>
+    <ProtectedRoute>
       <div>
       <Header />
 
@@ -215,7 +214,7 @@ onClick={() => deleteDeal(deal.id)}>
     />
     <Route
   path="/Login"
-  element={<Login setIsLoggedIn={setIsLoggedIn} />}
+  element={<Login/>}
 />
 <Route
   path="/register"

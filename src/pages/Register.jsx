@@ -6,10 +6,26 @@ function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const handleRegister = () =>
-{
-  alert("Registration Successful!");
-  navigate("/login");
+ const handleRegister = async () => {
+  try {
+    await fetch("http://localhost:5000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+    });
+
+    alert("Registration Successful!");
+    navigate("/login");
+  } catch (error) {
+    alert("Registration Failed");
+    console.log(error);
+  }
 };
 
   return (

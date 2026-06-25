@@ -16,11 +16,22 @@ db.prepare(`
 db.prepare(`
   CREATE TABLE IF NOT EXISTS claims (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    dealId INTEGER NOT NULL
+    dealId INTEGER NOT NULL,
+    userId INTEGER NOT NULL
   )
 `).run();
 
 console.log("Claims table created successfully!");
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+  )
+`).run();
+
+console.log("Users table created successfully!");
 
 
 db.close();
