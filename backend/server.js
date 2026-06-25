@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const app = express();
+const bcrypt = require("bcrypt");
 const corsOptions = {
   origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -12,30 +13,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 app.use(express.json());
-console.log("CORS ENABLED");
-function verifyToken(req, res, next) {
-  const authHeader = req.headers.authorization;
+ console.log("CORS ENABLED");
 
-  if (!authHeader) {
-    return res.status(401).json({
-      message: "No token provided",
-    });
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, "secretkey");
-
-    req.user = decoded;
-
-    next();
-  } catch (error) {
-    return res.status(401).json({
-      message: "Invalid token",
-    });
-  }
-}
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization;
 
@@ -66,7 +45,7 @@ app.get("/", (req, res) => {
 
 app.get("/deals", (req, res) => {
   const deals = db.prepare("SELECT * FROM deals").all();
-  res.json(deals);
+  res.json(deals);  
 });
 app.post("/deals", (req, res) => {
   const { title, store, discount, description } = req.body;
@@ -144,14 +123,30 @@ app.get("/my-claims", verifyToken, (req, res) => {
 
   res.json(claims);
 });
-app.post("/register", (req, res) => {
+ 
+app.get("/users", (req, res) => {
+  const users = db.prepare(`
+    SELECT
+      id,
+      name,
+      email,
+      isAdmin
+    FROM users
+  `).all();
+
+  res.json(users);
+});
+
+app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     db.prepare(`
       INSERT INTO users (name, email, password)
       VALUES (?, ?, ?)
-    `).run(name, email, password);
+    `).run(name, email, hashedPassword);
 
     res.json({
       success: true,
@@ -162,16 +157,37 @@ app.post("/register", (req, res) => {
     });
   }
 });
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   const user = db.prepare(`
     SELECT *
     FROM users
-    WHERE email = ? AND password = ?
-  `).get(email, password);
+    WHERE email = ?
+    `).get(email);
+  
+   
+    if (!user) {
+    return res.status(401).json({
+      message: "Invalid credentials",
+    });
+  }
+   const validPassword = await bcrypt.compare(
+  password,
+  user.password
+);
+if (!validPassword) {
+  return res.status(401).json({
+    message: "Invalid credentials",
+  });
+}
 
-  if (!user) {
+  const passwordMatch = await bcrypt.compare(
+    password,
+    user.password
+  );
+
+  if (!passwordMatch) {
     return res.status(401).json({
       message: "Invalid credentials",
     });
